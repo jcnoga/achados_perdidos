@@ -410,15 +410,14 @@
            CONFIGURAÇÃO DO FIREBASE - COLE SUAS CHAVES AQUI
            ========================================================== 
         */
-const firebaseConfig = {
-  apiKey: "AIzaSyC5lYxqNHxCOBPH-ZFK9Br4PHnOCFzUyXs",
-  authDomain: "prontuario-ee1fd.firebaseapp.com",
-  projectId: "prontuario-ee1fd",
-  storageBucket: "prontuario-ee1fd.firebasestorage.app",
-  messagingSenderId: "107787636728",
-  appId: "1:107787636728:web:18ee71ce1eca6d4450100d",
-  measurementId: "G-4614MWTTME"
-};
+        const firebaseConfig = {
+            apiKey: "SUA_API_KEY_AQUI",
+            authDomain: "SEU_PROJETO.firebaseapp.com",
+            projectId: "SEU_PROJECT_ID",
+            storageBucket: "SEU_PROJETO.appspot.com",
+            messagingSenderId: "SEU_MESSAGING_ID",
+            appId: "SEU_APP_ID"
+        };
 
         // --- INICIALIZAÇÃO ---
         let app, auth, db;
@@ -504,21 +503,40 @@ const firebaseConfig = {
                 alert("Erro no login social: " + error.message);
             }
         };
+		
 
-        window.resetPassword = async () => {
-            const email = prompt("Digite seu e-mail para recuperação:");
+
+window.resetPassword = async () => {
+            // Tenta pegar o e-mail do campo de login primeiro
+            let email = document.getElementById('auth-email').value;
+            
+            // Se o campo estiver vazio, pede pro usuário digitar
+            if (!email) {
+                email = prompt("Digite seu e-mail para receber o link de redefinição:");
+            }
+
             if(email) {
+                // Validação simples de email
+                if(!email.includes('@') || !email.includes('.')) {
+                    return alert("Por favor, digite um e-mail válido.");
+                }
+
                 try {
                     await sendPasswordResetEmail(auth, email);
-                    alert("E-mail de recuperação enviado!");
+                    alert(`✅ E-mail enviado para: ${email}\n\nVerifique sua Caixa de Entrada e também a pasta de SPAM/Lixo Eletrônico.`);
                 } catch (error) {
-                    alert("Erro: " + error.message);
+                    console.error("Erro reset senha:", error);
+                    if (error.code === 'auth/user-not-found') {
+                        alert("❌ Este e-mail não está cadastrado.");
+                    } else if (error.code === 'auth/invalid-email') {
+                        alert("❌ Formato de e-mail inválido.");
+                    } else {
+                        alert("❌ Erro ao enviar: " + error.message);
+                    }
                 }
+            } else {
+                alert("Você precisa informar um e-mail.");
             }
-        };
-
-        window.logout = () => {
-            signOut(auth);
         };
 
         // --- FUNÇÕES DE NAVEGAÇÃO ---
