@@ -15,6 +15,7 @@
             --primary-color: #0d6efd;
             --secondary-color: #6c757d;
             --bg-light: #f8f9fa;
+            /* Cor de fundo dos inputs */
             --input-bg-blue: #eaf4ff; 
             --input-border-blue: #aecbeb;
         }
@@ -48,16 +49,21 @@
         .view-section.active {
             display: block;
         }
+
+        /* --- ESTILO DOS CAMPOS DE ENTRADA (FUNDO AZUL) --- */
         .form-control, .form-select {
             background-color: var(--input-bg-blue) !important;
             border: 1px solid var(--input-border-blue) !important;
             color: #0c4128;
         }
+        /* Efeito ao clicar no campo (Foco) */
         .form-control:focus, .form-select:focus {
             background-color: #ffffff !important;
             border-color: var(--primary-color) !important;
             box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
         }
+        /* ------------------------------------------------------- */
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -143,71 +149,19 @@
             color: var(--secondary-color);
         }
         .search-icon-input input {
-            padding-left: 40px;
-            border-radius: 20px !important;
+            padding-left: 40px; /* Espaço para o ícone */
+            border-radius: 20px !important; /* Arredondado como na imagem */
         }
         .filter-select {
             border-radius: 20px !important;
-        }
-
-        /* --- ESTILOS DETALHES --- */
-        .detail-label {
-            font-size: 0.85rem;
-            color: #6c757d;
-            margin-bottom: 2px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .detail-value {
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: #212529;
-            margin-bottom: 15px;
-        }
-        .contact-box {
-            background-color: #f1f4f9;
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 20px;
-            text-align: center;
-            border: 1px solid #e0e0e0;
-        }
-        .btn-whatsapp {
-            background-color: #25D366;
-            color: white;
-            font-weight: bold;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 50px;
-            width: 100%;
-            display: block;
-            text-decoration: none;
-            font-size: 1rem;
-            box-shadow: 0 4px 6px rgba(37, 211, 102, 0.2);
-        }
-        .btn-whatsapp:hover {
-            background-color: #128C7E;
-            color: white;
-            transform: scale(1.02);
-        }
-        .modal-header { border-bottom: none; padding-bottom: 0; }
-        .modal-footer { border-top: none; }
-
-        /* Admin Area */
-        #admin-panel {
-            background: #e2e3e5;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-            border: 1px solid #d3d6d8;
-            display: none; /* Oculto por padrão */
         }
     </style>
 </head>
 <body>
 
+    <!-- Aviso se não configurado -->
     <div id="config-warning">
-        ⚠️ <strong>Atenção:</strong> Configure as chaves do Firebase no código (linha 600).
+        ⚠️ <strong>Atenção:</strong> Você precisa configurar as chaves do Firebase no código (linha 440) para o app funcionar.
     </div>
 
     <div class="app-container">
@@ -216,10 +170,12 @@
         <div class="header">
             <h5 class="m-0"><i class="fa-solid fa-magnifying-glass-location"></i> Achados & Perdidos</h5>
             
+            <!-- Informações do Usuário -->
             <div id="user-info" class="small mt-2" style="display:none;">
                 Olá, <span id="user-name">Usuário</span> | <a href="#" onclick="logout()" class="text-white">Sair</a>
             </div>
 
+            <!-- Link do Instagram -->
             <div class="small mt-1">
                 <a href="https://instagram.com/sites.landingpages" target="_blank" class="text-white text-decoration-none">
                     <i class="fa-brands fa-instagram"></i> Siga-nos no Instagram @sites.landingpages
@@ -278,18 +234,6 @@
                 <button onclick="showView('view-list')" class="btn btn-primary btn-lg mt-3">
                     <i class="fa-solid fa-list"></i> Ver Todos os Itens
                 </button>
-
-                <!-- ÁREA RESTRITA DO ADMINISTRADOR -->
-                <div id="admin-panel">
-                    <h6><i class="fa-solid fa-lock"></i> Área do Administrador</h6>
-                    <p class="small text-muted mb-2">Defina em quantos meses os itens serão deletados automaticamente.</p>
-                    <div class="input-group mb-3">
-                        <input type="number" id="admin-months" class="form-control" placeholder="Meses" value="6">
-                        <button class="btn btn-dark" onclick="updateRetentionSettings()">Salvar Configuração</button>
-                    </div>
-                    <small class="text-danger">Nota: A exclusão é feita pelo Firebase (TTL) baseado nesta configuração no momento do cadastro.</small>
-                </div>
-                <!-- FIM ADMIN -->
             </div>
         </div>
 
@@ -297,6 +241,7 @@
         <div id="view-lost-form" class="view-section">
             <h4 class="mb-3 text-danger">Cadastre o item perdido</h4>
             <form onsubmit="handleRegisterItem(event, 'lost')">
+                <!-- Info Item -->
                 <div class="mb-3">
                     <label class="form-label">Categoria</label>
                     <select class="form-select" name="category" required>
@@ -328,6 +273,7 @@
                     </div>
                 </div>
                 
+                <!-- Foto -->
                 <div class="mb-3">
                     <label class="form-label">Foto do Objeto</label>
                     <div class="img-preview" onclick="document.getElementById('lost-photo').click()">
@@ -337,6 +283,7 @@
                     <input type="file" id="lost-photo" accept="image/*" style="display:none" onchange="previewImage(this, 'lost-photo-preview', 'lost-photo-text')">
                 </div>
 
+                <!-- Detalhes -->
                 <div class="mb-3">
                     <label class="form-label">Data que Perdeu *</label>
                     <input type="date" class="form-control" name="date" required>
@@ -346,6 +293,7 @@
                     <input type="text" class="form-control" name="location" placeholder="Ex: Centro, São Paulo - SP">
                 </div>
 
+                <!-- Contato -->
                 <h5 class="mt-4">Contato</h5>
                 <div class="mb-3">
                     <label class="form-label">Nome</label>
@@ -367,6 +315,8 @@
         <div id="view-found-form" class="view-section">
             <h4 class="mb-3 text-success">Cadastre item encontrado</h4>
             <form onsubmit="handleRegisterItem(event, 'found')">
+                
+                 <!-- Foto (Obrigatória) -->
                  <div class="mb-3">
                     <label class="form-label">Foto do Objeto *</label>
                     <div class="img-preview" onclick="document.getElementById('found-photo').click()">
@@ -401,6 +351,7 @@
                     ⚠️ <strong>Aviso:</strong> Se for documento, não divulgue o número completo.
                 </div>
 
+                <!-- Detalhes Ocorrência -->
                 <div class="mb-3">
                     <label class="form-label">Data que Encontrou *</label>
                     <input type="date" class="form-control" name="date" required>
@@ -418,6 +369,7 @@
                     </select>
                 </div>
 
+                 <!-- Contato -->
                  <h5 class="mt-4">Suas Informações</h5>
                  <div class="mb-3">
                      <label class="form-label">Seu Nome</label>
@@ -435,13 +387,14 @@
             </form>
         </div>
 
-        <!-- LISTAGEM -->
+        <!-- LISTAGEM DE ITENS -->
         <div id="view-list" class="view-section">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4>Itens Cadastrados</h4>
                 <button onclick="showView('view-menu')" class="btn btn-sm btn-outline-primary">Voltar</button>
             </div>
             
+            <!-- NOVA ÁREA DE BUSCA (INSPIRADA NA IMAGEM) -->
             <div class="search-container">
                 <div class="row g-2">
                     <div class="col-md-8">
@@ -463,7 +416,9 @@
                     </div>
                 </div>
             </div>
+            <!-- FIM DA BUSCA -->
 
+            <!-- Filtros de Tipo (Botões) -->
             <div class="btn-group w-100 mb-3" role="group">
                 <button type="button" class="btn btn-outline-secondary active" onclick="filterList('all', this)">Todos</button>
                 <button type="button" class="btn btn-outline-secondary" onclick="filterList('lost', this)">Perdidos</button>
@@ -471,6 +426,7 @@
             </div>
 
             <div id="items-container">
+                <!-- Os itens serão carregados aqui via JS -->
                 <div class="text-center text-muted mt-5">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Carregando...</span>
@@ -482,14 +438,23 @@
 
     </div>
 
-    <!-- MODAL -->
+    <!-- MODAL DETALHES DO ITEM -->
     <div class="modal fade" id="itemModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Detalhes</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="modalBodyContent"></div>
+                <div class="modal-body">
+                    <img id="modalImg" src="" class="img-fluid rounded mb-3 d-none">
+                    <p id="modalDesc"></p>
+                    <ul class="list-group list-group-flush mb-3" id="modalDetails"></ul>
+                    
+                    <div id="modalContactArea" class="d-grid gap-2">
+                        <!-- Botões de contato -->
+                    </div>
+                </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger d-none" id="btnDelete" onclick="deleteCurrentItem()">Excluir Meu Registro</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -502,22 +467,21 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy, setDoc, getDoc, Timestamp } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.11.1/firebase-firestore.js";
 
-        // CONFIGURAÇÃO FIREBASE
+        /* ==========================================================
+           CONFIGURAÇÃO DO FIREBASE - COLE SUAS CHAVES AQUI
+           ========================================================== 
+        */
 const firebaseConfig = {
-  apiKey: "AIzaSyCiXvAdWxoH4kl4JFOqkj29rEHL8b2ETyc",
-  authDomain: "achadosperdidos-ca6a4.firebaseapp.com",
-  projectId: "achadosperdidos-ca6a4",
-  storageBucket: "achadosperdidos-ca6a4.firebasestorage.app",
-  messagingSenderId: "217980526722",
-  appId: "1:217980526722:web:32a096730fbea787e9d49b",
-  measurementId: "G-H090MVCV6N"
+  apiKey: "AIzaSyC5lYxqNHxCOBPH-ZFK9Br4PHnOCFzUyXs",
+  authDomain: "prontuario-ee1fd.firebaseapp.com",
+  projectId: "prontuario-ee1fd",
+  storageBucket: "prontuario-ee1fd.firebasestorage.app",
+  messagingSenderId: "107787636728",
+  appId: "1:107787636728:web:18ee71ce1eca6d4450100d",
+  measurementId: "G-4614MWTTME"
 };
-        /* ==============================================================
-           DEFINA AQUI O E-MAIL DO ADMINISTRADOR
-           ============================================================== */
-        const ADMIN_EMAIL = "SEU_EMAIL_ADMIN@GMAIL.COM"; 
 
         // --- INICIALIZAÇÃO ---
         let app, auth, db;
@@ -526,6 +490,7 @@ const firebaseConfig = {
         try {
             if (firebaseConfig.apiKey === "SUA_API_KEY_AQUI") {
                 document.getElementById('config-warning').style.display = 'block';
+                console.warn("Firebase não configurado.");
             } else {
                 app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
@@ -537,9 +502,6 @@ const firebaseConfig = {
                         document.getElementById('user-name').textContent = user.displayName || user.email;
                         document.getElementById('user-info').style.display = 'block';
                         showView('view-menu');
-                        
-                        // Checa se é Admin
-                        checkAdmin(user);
                     } else {
                         currentUser = null;
                         document.getElementById('user-info').style.display = 'none';
@@ -548,61 +510,17 @@ const firebaseConfig = {
                 });
             }
         } catch (e) {
-            alert("Erro Firebase: " + e.message);
+            console.error("Erro ao iniciar Firebase:", e);
+            alert("Erro de configuração do Firebase. Veja o console.");
         }
 
+        // --- VARIÁVEIS GLOBAIS DE UI ---
         window.isRegistering = false;
         window.currentFilter = 'all';
         let allItemsCache = [];
         let currentItemId = null;
 
-        // --- LÓGICA DE ADMIN ---
-        async function checkAdmin(user) {
-            if (user.email === ADMIN_EMAIL) {
-                // Mostra painel
-                document.getElementById('admin-panel').style.display = 'block';
-                // Carrega configuração atual
-                try {
-                    const docRef = doc(db, "settings", "global");
-                    const docSnap = await getDoc(docRef);
-                    if (docSnap.exists()) {
-                        document.getElementById('admin-months').value = docSnap.data().monthsToKeep || 6;
-                    }
-                } catch (e) {
-                    console.log("Configuração não encontrada ou sem permissão", e);
-                }
-            } else {
-                document.getElementById('admin-panel').style.display = 'none';
-            }
-        }
-
-        window.updateRetentionSettings = async () => {
-            const months = parseInt(document.getElementById('admin-months').value);
-            if(!months || months < 1) return alert("Inválido");
-
-            try {
-                await setDoc(doc(db, "settings", "global"), { 
-                    monthsToKeep: months,
-                    updatedBy: currentUser.email,
-                    updatedAt: new Date().toISOString()
-                });
-                alert("Configuração Salva! Novos itens terão validade de " + months + " meses.");
-            } catch (error) {
-                alert("Erro (Você é admin? Verifique as Regras): " + error.message);
-            }
-        }
-
-        async function getRetentionMonths() {
-            // Busca configuração ou usa padrão 6 meses
-            try {
-                const docRef = doc(db, "settings", "global");
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) return docSnap.data().monthsToKeep;
-            } catch (e) { console.log("Usando padrão 6 meses"); }
-            return 6; 
-        }
-
-        // --- AUTH ---
+        // --- FUNÇÕES DE AUTENTICAÇÃO ---
         window.toggleAuthMode = () => {
             window.isRegistering = !window.isRegistering;
             const formTitle = document.querySelector('#view-auth h4');
@@ -612,25 +530,11 @@ const firebaseConfig = {
             if(window.isRegistering) {
                 formTitle.textContent = "Criar Conta";
                 btnSubmit.textContent = "Cadastrar";
-                btnSubmit.classList.remove('btn-primary');
-                btnSubmit.classList.add('btn-success');
                 toggleLink.textContent = "Já tem conta? Faça Login";
             } else {
                 formTitle.textContent = "Bem-vindo";
                 btnSubmit.textContent = "Entrar";
-                btnSubmit.classList.remove('btn-success');
-                btnSubmit.classList.add('btn-primary');
                 toggleLink.textContent = "Não tem conta? Cadastre-se";
-            }
-        };
-
-        const handleAuthError = (error) => {
-            if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                alert("❌ E-mail ou senha incorretos.");
-            } else if (error.code === 'auth/email-already-in-use') {
-                alert("⚠️ Este e-mail já está cadastrado.");
-            } else {
-                alert("Erro: " + error.message);
             }
         };
 
@@ -638,36 +542,77 @@ const firebaseConfig = {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
+
             try {
                 if (window.isRegistering) {
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    alert("✅ Conta criada!");
+                    alert("Conta criada com sucesso!");
                 } else {
                     await signInWithEmailAndPassword(auth, email, pass);
                 }
-            } catch (error) { handleAuthError(error); }
+            } catch (error) {
+                alert("Erro: " + error.message);
+            }
         });
 
-        window.socialLogin = async (p) => {
-            if(!auth) return;
-            try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch (e) { handleAuthError(e); }
-        };
+        window.socialLogin = async (providerName) => {
+            if(!auth) return alert("Firebase não configurado.");
+            let provider;
+            if(providerName === 'google') provider = new GoogleAuthProvider();
 
-        window.resetPassword = async () => {
-            let email = document.getElementById('auth-email').value;
-            if (!email) email = prompt("E-mail para recuperação:");
-            if(email) {
-                try { await sendPasswordResetEmail(auth, email); alert("✅ E-mail enviado!"); } 
-                catch (e) { alert("Erro: " + e.message); }
+            try {
+                await signInWithPopup(auth, provider);
+            } catch (error) {
+                console.error(error);
+                alert("Erro no login social: " + error.message);
             }
         };
 
-        window.logout = () => signOut(auth);
+        window.resetPassword = async () => {
+            // Tenta pegar o e-mail do campo de login primeiro
+            let email = document.getElementById('auth-email').value;
+            
+            // Se o campo estiver vazio, pede pro usuário digitar
+            if (!email) {
+                email = prompt("Digite seu e-mail para receber o link de redefinição:");
+            }
 
+            if(email) {
+                // Validação simples de email
+                if(!email.includes('@') || !email.includes('.')) {
+                    return alert("Por favor, digite um e-mail válido.");
+                }
+
+                try {
+                    await sendPasswordResetEmail(auth, email);
+                    alert(`✅ E-mail enviado para: ${email}\n\nVerifique sua Caixa de Entrada e também a pasta de SPAM/Lixo Eletrônico.`);
+                } catch (error) {
+                    console.error("Erro reset senha:", error);
+                    if (error.code === 'auth/user-not-found') {
+                        alert("❌ Este e-mail não está cadastrado.");
+                    } else if (error.code === 'auth/invalid-email') {
+                        alert("❌ Formato de e-mail inválido.");
+                    } else {
+                        alert("❌ Erro ao enviar: " + error.message);
+                    }
+                }
+            } else {
+                alert("Você precisa informar um e-mail.");
+            }
+        };
+
+        window.logout = () => {
+            signOut(auth);
+        };
+
+        // --- FUNÇÕES DE NAVEGAÇÃO ---
         window.showView = (viewId) => {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            if(viewId === 'view-list') loadItems();
+            
+            if(viewId === 'view-list') {
+                loadItems();
+            }
         };
 
         window.previewImage = (input, imgId, textId) => {
@@ -683,113 +628,132 @@ const firebaseConfig = {
             }
         };
 
-        // --- REGISTER ITEM COM VALIDADE ---
+        // --- FUNÇÕES DE DADOS (FIRESTORE) ---
         window.handleRegisterItem = async (e, type) => {
             e.preventDefault();
-            if (!auth || !currentUser) return alert("Login necessário.");
+            if (!auth || !currentUser) return alert("Você precisa estar logado.");
 
             const form = e.target;
             const formData = new FormData(form);
             const fileInput = form.querySelector('input[type="file"]');
-            const btnSubmit = form.querySelector('button[type="submit"]');
             
-            btnSubmit.disabled = true;
-            btnSubmit.innerText = "Salvando...";
-
             let imageBase64 = null;
-            try {
-                if (fileInput.files.length > 0) {
-                    imageBase64 = await compressImage(fileInput.files[0]);
-                } else if (type === 'found') {
-                    throw new Error("Foto é obrigatória para itens encontrados.");
+            if (fileInput.files.length > 0) {
+                if(fileInput.files[0].size > 500000) {
+                    return alert("A imagem é muito grande. Escolha uma menor (máx 500kb).");
                 }
+                imageBase64 = await toBase64(fileInput.files[0]);
+            } else if (type === 'found') {
+                return alert("Foto é obrigatória para itens encontrados.");
+            }
 
-                // CÁLCULO DA VALIDADE (TTL)
-                const monthsToKeep = await getRetentionMonths();
-                const expireDate = new Date();
-                expireDate.setMonth(expireDate.getMonth() + monthsToKeep);
+            const itemData = {
+                type: type,
+                category: formData.get('category'),
+                title: formData.get('title'),
+                description: formData.get('description'),
+                date: formData.get('date'),
+                location: formData.get('location'),
+                contactName: formData.get('contactName'),
+                whatsapp: formData.get('whatsapp'),
+                uid: currentUser.uid,
+                userEmail: currentUser.email,
+                createdAt: new Date().toISOString(),
+                image: imageBase64,
+                color: formData.get('color') || '',
+                brand: formData.get('brand') || '',
+                deliveryMethod: formData.get('deliveryMethod') || ''
+            };
 
-                const itemData = {
-                    type: type,
-                    category: formData.get('category'),
-                    title: formData.get('title'),
-                    description: formData.get('description'),
-                    date: formData.get('date'),
-                    location: formData.get('location'),
-                    contactName: formData.get('contactName'),
-                    whatsapp: formData.get('whatsapp'),
-                    uid: currentUser.uid,
-                    userEmail: currentUser.email,
-                    createdAt: new Date().toISOString(),
-                    
-                    // CAMPO MÁGICO PARA O FIREBASE DELETAR
-                    expireAt: Timestamp.fromDate(expireDate), 
-
-                    image: imageBase64,
-                    color: formData.get('color') || '',
-                    brand: formData.get('brand') || '',
-                    deliveryMethod: formData.get('deliveryMethod') || ''
-                };
-
+            try {
                 await addDoc(collection(db, "items"), itemData);
-                alert("Item cadastrado! Será removido automaticamente em " + monthsToKeep + " meses.");
+                alert("Item cadastrado com sucesso!");
                 form.reset();
                 const imgPrev = form.querySelector('img');
                 if(imgPrev) imgPrev.style.display = 'none';
                 const txtPrev = form.querySelector('.img-preview span');
                 if(txtPrev) txtPrev.style.display = 'block';
+                
                 showView('view-list');
             } catch (error) {
-                alert("Erro: " + error.message);
-            } finally {
-                btnSubmit.disabled = false;
-                btnSubmit.innerText = "Cadastrar";
+                console.error("Erro ao salvar: ", error);
+                alert("Erro ao salvar item.");
             }
         };
 
         window.loadItems = async () => {
             const container = document.getElementById('items-container');
-            container.innerHTML = '<div class="text-center mt-5"><div class="spinner-border text-primary"></div></div>';
+            container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>';
+            
             if (!db) return;
+
             try {
                 const q = query(collection(db, "items"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
+                
                 allItemsCache = [];
-                querySnapshot.forEach((doc) => allItemsCache.push({ id: doc.id, ...doc.data() }));
+                querySnapshot.forEach((doc) => {
+                    allItemsCache.push({ id: doc.id, ...doc.data() });
+                });
+
                 renderItems(allItemsCache);
+
             } catch (error) {
-                if(error.message.includes("index")) container.innerHTML = '<p class="text-center text-danger">Necessário criar Índice (Veja o Console F12)</p>';
-                else container.innerHTML = '<p class="text-center text-danger">' + error.message + '</p>';
+                console.error(error);
+                container.innerHTML = '<p class="text-center text-danger">Erro ao carregar itens.</p>';
             }
         };
 
-        window.triggerSearch = () => renderItems(allItemsCache);
+        // Função wrapper para chamar renderItems quando digita
+        window.triggerSearch = () => {
+            renderItems(allItemsCache);
+        }
+
         window.filterList = (type, btn) => {
             window.currentFilter = type;
             const btns = btn.parentElement.querySelectorAll('button');
             btns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            
             renderItems(allItemsCache);
         };
 
+        // Função principal de renderização com Filtros de Texto e Categoria
         function renderItems(items) {
             const container = document.getElementById('items-container');
             container.innerHTML = '';
+
+            // 1. Pegar valores dos filtros
             const searchText = document.getElementById('search-input').value.toLowerCase();
             const categoryFilter = document.getElementById('filter-category').value;
 
             const filtered = items.filter(item => {
-                if (window.currentFilter !== 'all' && item.type !== window.currentFilter) return false;
-                if (categoryFilter && item.category !== categoryFilter) return false;
-                if (searchText) {
-                    const content = (item.title + item.description + item.location).toLowerCase();
-                    if (!content.includes(searchText)) return false;
+                // Filtro 1: Tipo (Perdido / Encontrado / Todos)
+                if (window.currentFilter !== 'all' && item.type !== window.currentFilter) {
+                    return false;
                 }
+
+                // Filtro 2: Categoria Dropdown
+                if (categoryFilter && item.category !== categoryFilter) {
+                    return false;
+                }
+
+                // Filtro 3: Busca Texto (Nome, Descrição, Local)
+                if (searchText) {
+                    const title = (item.title || '').toLowerCase();
+                    const desc = (item.description || '').toLowerCase();
+                    const loc = (item.location || '').toLowerCase();
+                    
+                    if (!title.includes(searchText) && !desc.includes(searchText) && !loc.includes(searchText)) {
+                        return false;
+                    }
+                }
+
                 return true;
             });
 
             if (filtered.length === 0) {
-                container.innerHTML = '<p class="text-center text-muted mt-4">Nenhum item encontrado.</p>';
+                container.innerHTML = '<p class="text-center text-muted mt-4">Nenhum item encontrado com estes critérios.</p>';
                 return;
             }
 
@@ -798,83 +762,99 @@ const firebaseConfig = {
                 const badgeText = item.type === 'lost' ? 'Perdido' : 'Encontrado';
                 const imgSrc = item.image ? item.image : 'https://via.placeholder.com/300x200?text=Sem+Foto';
                 
-                container.innerHTML += `
+                const cardHTML = `
                     <div class="item-card bg-white">
                         <span class="badge ${badgeClass} position-absolute m-2">${badgeText}</span>
-                        <img src="${imgSrc}">
+                        <img src="${imgSrc}" alt="${item.title}">
                         <div class="card-body">
                             <h5 class="card-title">${item.title}</h5>
                             <p class="card-text text-muted small"><i class="fa-solid fa-location-dot"></i> ${item.location}</p>
                             <p class="card-text text-truncate">${item.description}</p>
                             <button onclick="openItemModal('${item.id}')" class="btn btn-outline-primary w-100 btn-sm">Ver Detalhes</button>
                         </div>
-                    </div>`;
+                    </div>
+                `;
+                container.innerHTML += cardHTML;
             });
         }
 
         window.openItemModal = (id) => {
             const item = allItemsCache.find(i => i.id === id);
             if(!item) return;
+
             window.currentItemId = id;
-            const modalBody = document.getElementById('modalBodyContent');
-            const btnDelete = document.getElementById('btnDelete');
+            
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalDesc').textContent = item.description;
+            
+            const img = document.getElementById('modalImg');
+            if(item.image) {
+                img.src = item.image;
+                img.classList.remove('d-none');
+            } else {
+                img.classList.add('d-none');
+            }
 
-            const formatDate = (str) => {
-                if(!str) return '-';
-                const p = str.split('-');
-                return new Date(p[0], p[1]-1, p[2]).toLocaleDateString('pt-BR', {day:'numeric', month:'long', year:'numeric'});
-            };
-
-            let whatsappBtn = item.whatsapp ? 
-                `<a href="https://wa.me/55${item.whatsapp.replace(/\D/g,'')}?text=Olá" target="_blank" class="btn-whatsapp mt-3"><i class="fab fa-whatsapp"></i> WhatsApp</a>` : 
-                '<div class="text-muted mt-3">Sem WhatsApp</div>';
-
-            if(currentUser && item.uid === currentUser.uid) btnDelete.classList.remove('d-none');
-            else btnDelete.classList.add('d-none');
-
-            modalBody.innerHTML = `
-                ${item.image ? `<img src="${item.image}" class="img-fluid rounded mb-3 w-100" style="max-height:300px; object-fit:contain">` : ''}
-                <h4 class="fw-bold">${item.title}</h4>
-                <div class="row mt-3">
-                    <div class="col-6"><div class="detail-label">Local</div><div class="detail-value">${item.location}</div></div>
-                    <div class="col-6"><div class="detail-label">Data</div><div class="detail-value">${formatDate(item.date)}</div></div>
-                    <div class="col-12"><div class="detail-label">Descrição</div><div class="detail-value fw-normal">${item.description}</div></div>
-                </div>
-                <div class="contact-box">
-                    <h6>${item.contactName}</h6>
-                    ${whatsappBtn}
-                    <a href="mailto:${item.userEmail}" class="d-block mt-2">${item.userEmail}</a>
-                </div>
+            const ul = document.getElementById('modalDetails');
+            ul.innerHTML = `
+                <li class="list-group-item"><strong>Categoria:</strong> ${item.category}</li>
+                <li class="list-group-item"><strong>Data:</strong> ${item.date}</li>
+                <li class="list-group-item"><strong>Local:</strong> ${item.location}</li>
+                ${item.brand ? `<li class="list-group-item"><strong>Marca:</strong> ${item.brand}</li>` : ''}
+                ${item.color ? `<li class="list-group-item"><strong>Cor:</strong> ${item.color}</li>` : ''}
+                <li class="list-group-item"><strong>Contato:</strong> ${item.contactName}</li>
             `;
-            new bootstrap.Modal(document.getElementById('itemModal')).show();
+
+            const contactArea = document.getElementById('modalContactArea');
+            contactArea.innerHTML = '';
+
+            const btnDelete = document.getElementById('btnDelete');
+            if(currentUser && item.uid === currentUser.uid) {
+                btnDelete.classList.remove('d-none');
+            } else {
+                btnDelete.classList.add('d-none');
+                
+                if(item.whatsapp) {
+                    const cleanPhone = item.whatsapp.replace(/\D/g,'');
+                    const msg = `Olá, vi seu anúncio no Achados e Perdidos sobre o item "${item.title}".`;
+                    contactArea.innerHTML += `
+                        <a href="https://wa.me/55${cleanPhone}?text=${encodeURIComponent(msg)}" target="_blank" class="btn btn-success">
+                            <i class="fab fa-whatsapp"></i> Chamar no WhatsApp
+                        </a>
+                    `;
+                }
+                contactArea.innerHTML += `
+                    <a href="mailto:${item.userEmail}" class="btn btn-secondary">
+                        <i class="fa-regular fa-envelope"></i> Enviar E-mail
+                    </a>
+                `;
+            }
+
+            const modal = new bootstrap.Modal(document.getElementById('itemModal'));
+            modal.show();
         };
 
         window.deleteCurrentItem = async () => {
-            if(confirm("Excluir?")) {
-                try { 
-                    await deleteDoc(doc(db, "items", window.currentItemId)); 
-                    bootstrap.Modal.getInstance(document.getElementById('itemModal')).hide();
-                    loadItems();
-                } catch(e) { alert(e.message); }
+            if(!confirm("Tem certeza que deseja excluir este registro?")) return;
+            
+            try {
+                await deleteDoc(doc(db, "items", window.currentItemId));
+                const modalEl = document.getElementById('itemModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+                
+                alert("Item excluído.");
+                loadItems();
+            } catch (error) {
+                alert("Erro ao excluir: " + error.message);
             }
         };
 
-        const compressImage = (file) => new Promise((resolve, reject) => {
+        const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = (e) => {
-                const img = new Image();
-                img.src = e.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const scale = 800 / img.width;
-                    canvas.width = 800;
-                    canvas.height = img.height * scale;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-                    resolve(canvas.toDataURL('image/jpeg', 0.7));
-                }
-            };
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = error => reject(error);
         });
 
     </script>
