@@ -15,11 +15,14 @@
             --primary-color: #0d6efd;
             --secondary-color: #6c757d;
             --bg-light: #f8f9fa;
+            /* Cor de fundo dos inputs */
+            --input-bg-blue: #eaf4ff; 
+            --input-border-blue: #aecbeb;
         }
         body {
             background-color: var(--bg-light);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-bottom: 70px; /* Espaço para navbar mobile se necessário */
+            padding-bottom: 70px;
         }
         .app-container {
             max-width: 600px;
@@ -39,13 +42,28 @@
             z-index: 1000;
         }
         .view-section {
-            display: none; /* Esconde todas as seções por padrão */
+            display: none;
             padding: 20px;
             animation: fadeIn 0.3s;
         }
         .view-section.active {
             display: block;
         }
+
+        /* --- NOVO ESTILO DOS CAMPOS DE ENTRADA (FUNDO AZUL) --- */
+        .form-control, .form-select {
+            background-color: var(--input-bg-blue) !important;
+            border: 1px solid var(--input-border-blue) !important;
+            color: #0c4128; /* Cor do texto levemente escura para contraste */
+        }
+        /* Efeito ao clicar no campo (Foco) */
+        .form-control:focus, .form-select:focus {
+            background-color: #ffffff !important; /* Fica branco ao digitar para melhor leitura */
+            border-color: var(--primary-color) !important;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        /* ------------------------------------------------------- */
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -54,13 +72,14 @@
             width: 100%;
             max-height: 300px;
             object-fit: contain;
-            background: #eee;
-            border: 2px dashed #ccc;
+            background: var(--input-bg-blue); /* Fundo azul também no preview */
+            border: 2px dashed var(--input-border-blue);
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             margin-bottom: 15px;
+            border-radius: 6px;
         }
         .img-preview img {
             max-width: 100%;
@@ -99,7 +118,6 @@
         .btn-google { background-color: #db4437; color: white; }
         .btn-facebook { background-color: #4267B2; color: white; }
 
-        /* Warning Config */
         #config-warning {
             background: #fff3cd;
             color: #856404;
@@ -114,7 +132,7 @@
 
     <!-- Aviso se não configurado -->
     <div id="config-warning">
-        ⚠️ <strong>Atenção:</strong> Você precisa configurar as chaves do Firebase no código (linha 370) para o app funcionar.
+        ⚠️ <strong>Atenção:</strong> Você precisa configurar as chaves do Firebase no código (linha 386) para o app funcionar.
     </div>
 
     <div class="app-container">
@@ -387,21 +405,14 @@
     </div>
 
     <!-- SCRIPTS -->
-    <!-- Firebase SDKs (Compatíveis com módulo ES) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, sendPasswordResetEmail, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
         /* ==========================================================
-           CONFIGURAÇÃO DO FIREBASE - PREENCHA AQUI
+           CONFIGURAÇÃO DO FIREBASE - COLE SUAS CHAVES AQUI
            ========================================================== 
-           1. Vá em https://console.firebase.google.com/
-           2. Crie um projeto.
-           3. Adicione um "App Web" (ícone </>).
-           4. Copie o objeto 'firebaseConfig'.
-           5. Habilite o Authentication (Email/Senha, Google, Facebook).
-           6. Habilite o Firestore Database (Modo de teste para começar).
         */
 const firebaseConfig = {
   apiKey: "AIzaSyC5lYxqNHxCOBPH-ZFK9Br4PHnOCFzUyXs",
@@ -418,7 +429,6 @@ const firebaseConfig = {
         let currentUser = null;
 
         try {
-            // Verifica se o usuário configurou (se apiKey ainda é o placeholder)
             if (firebaseConfig.apiKey === "SUA_API_KEY_AQUI") {
                 document.getElementById('config-warning').style.display = 'block';
                 console.warn("Firebase não configurado.");
@@ -427,7 +437,6 @@ const firebaseConfig = {
                 auth = getAuth(app);
                 db = getFirestore(app);
                 
-                // Monitorar Estado do Login
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         currentUser = user;
@@ -447,14 +456,12 @@ const firebaseConfig = {
         }
 
         // --- VARIÁVEIS GLOBAIS DE UI ---
-        window.isRegistering = false; // Controle de toggle Login/Cadastro
+        window.isRegistering = false;
         window.currentFilter = 'all';
         let allItemsCache = [];
         let currentItemId = null;
 
-        // --- FUNÇÕES DE AUTENTICAÇÃO EXPOSTAS ---
-        
-        // Toggle Login/Cadastro UI
+        // --- FUNÇÕES DE AUTENTICAÇÃO ---
         window.toggleAuthMode = () => {
             window.isRegistering = !window.isRegistering;
             const formTitle = document.querySelector('#view-auth h4');
@@ -472,7 +479,6 @@ const firebaseConfig = {
             }
         };
 
-        // Login/Cadastro Email e Senha
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = document.getElementById('auth-email').value;
@@ -490,7 +496,6 @@ const firebaseConfig = {
             }
         });
 
-        // Login Social
         window.socialLogin = async (providerName) => {
             if(!auth) return alert("Firebase não configurado.");
             let provider;
@@ -505,7 +510,6 @@ const firebaseConfig = {
             }
         };
 
-        // Recuperar Senha
         window.resetPassword = async () => {
             const email = prompt("Digite seu e-mail para recuperação:");
             if(email) {
@@ -518,7 +522,6 @@ const firebaseConfig = {
             }
         };
 
-        // Logout
         window.logout = () => {
             signOut(auth);
         };
@@ -528,13 +531,11 @@ const firebaseConfig = {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
             
-            // Se for view de lista, carrega dados
             if(viewId === 'view-list') {
                 loadItems();
             }
         };
 
-        // Preview de Imagem
         window.previewImage = (input, imgId, textId) => {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -549,8 +550,6 @@ const firebaseConfig = {
         };
 
         // --- FUNÇÕES DE DADOS (FIRESTORE) ---
-
-        // Salvar Item
         window.handleRegisterItem = async (e, type) => {
             e.preventDefault();
             if (!auth || !currentUser) return alert("Você precisa estar logado.");
@@ -559,11 +558,9 @@ const firebaseConfig = {
             const formData = new FormData(form);
             const fileInput = form.querySelector('input[type="file"]');
             
-            // Processar imagem para Base64 (solução simples para arquivo único sem Storage bucket complexo)
             let imageBase64 = null;
             if (fileInput.files.length > 0) {
-                // Limitar tamanho para não estourar cota gratuita do Firestore document (1MB max)
-                if(fileInput.files[0].size > 500000) { // ~500kb
+                if(fileInput.files[0].size > 500000) {
                     return alert("A imagem é muito grande. Escolha uma menor (máx 500kb).");
                 }
                 imageBase64 = await toBase64(fileInput.files[0]);
@@ -572,7 +569,7 @@ const firebaseConfig = {
             }
 
             const itemData = {
-                type: type, // 'lost' ou 'found'
+                type: type,
                 category: formData.get('category'),
                 title: formData.get('title'),
                 description: formData.get('description'),
@@ -580,22 +577,19 @@ const firebaseConfig = {
                 location: formData.get('location'),
                 contactName: formData.get('contactName'),
                 whatsapp: formData.get('whatsapp'),
-                uid: currentUser.uid, // ID do dono para permissão
+                uid: currentUser.uid,
                 userEmail: currentUser.email,
                 createdAt: new Date().toISOString(),
                 image: imageBase64,
-                
-                // Campos específicos
                 color: formData.get('color') || '',
                 brand: formData.get('brand') || '',
                 deliveryMethod: formData.get('deliveryMethod') || ''
             };
 
             try {
-                const docRef = await addDoc(collection(db, "items"), itemData);
+                await addDoc(collection(db, "items"), itemData);
                 alert("Item cadastrado com sucesso!");
                 form.reset();
-                // Resetar previews
                 const imgPrev = form.querySelector('img');
                 if(imgPrev) imgPrev.style.display = 'none';
                 const txtPrev = form.querySelector('.img-preview span');
@@ -608,7 +602,6 @@ const firebaseConfig = {
             }
         };
 
-        // Listar Itens
         window.loadItems = async () => {
             const container = document.getElementById('items-container');
             container.innerHTML = '<div class="text-center p-5"><div class="spinner-border text-primary"></div></div>';
@@ -632,10 +625,8 @@ const firebaseConfig = {
             }
         };
 
-        // Renderizar Lista (Com filtros)
         window.filterList = (type, btn) => {
             window.currentFilter = type;
-            // UI Botoes
             const btns = btn.parentElement.querySelectorAll('button');
             btns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
@@ -678,14 +669,12 @@ const firebaseConfig = {
             });
         }
 
-        // Modal Detalhes
         window.openItemModal = (id) => {
             const item = allItemsCache.find(i => i.id === id);
             if(!item) return;
 
             window.currentItemId = id;
             
-            // Preencher dados
             document.getElementById('modalTitle').textContent = item.title;
             document.getElementById('modalDesc').textContent = item.description;
             
@@ -707,18 +696,15 @@ const firebaseConfig = {
                 <li class="list-group-item"><strong>Contato:</strong> ${item.contactName}</li>
             `;
 
-            // Botões de Ação
             const contactArea = document.getElementById('modalContactArea');
             contactArea.innerHTML = '';
 
-            // Se sou dono -> Excluir
             const btnDelete = document.getElementById('btnDelete');
             if(currentUser && item.uid === currentUser.uid) {
                 btnDelete.classList.remove('d-none');
             } else {
                 btnDelete.classList.add('d-none');
                 
-                // Se não sou dono -> Contatar
                 if(item.whatsapp) {
                     const cleanPhone = item.whatsapp.replace(/\D/g,'');
                     const msg = `Olá, vi seu anúncio no Achados e Perdidos sobre o item "${item.title}".`;
@@ -739,13 +725,11 @@ const firebaseConfig = {
             modal.show();
         };
 
-        // Excluir Item
         window.deleteCurrentItem = async () => {
             if(!confirm("Tem certeza que deseja excluir este registro?")) return;
             
             try {
                 await deleteDoc(doc(db, "items", window.currentItemId));
-                // Fechar modal
                 const modalEl = document.getElementById('itemModal');
                 const modal = bootstrap.Modal.getInstance(modalEl);
                 modal.hide();
@@ -757,7 +741,6 @@ const firebaseConfig = {
             }
         };
 
-        // Utilitário: File to Base64
         const toBase64 = file => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
@@ -766,8 +749,6 @@ const firebaseConfig = {
         });
 
     </script>
-
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
